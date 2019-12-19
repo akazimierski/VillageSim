@@ -10,7 +10,7 @@ public class Unit : MonoBehaviour
     private ResourceNode rsrcNode;
     private WorkplaceNode wpNode;
     private State state;
-    private int resourceAmount;
+    private uint resourceAmount;
 
     enum State
     {
@@ -50,12 +50,12 @@ public class Unit : MonoBehaviour
                     resourceAmount += rsrcNode.TakeResource();
                     if (resourceAmount > 0)
                     {
-                        Debug.Log("Unit: Resource taken");
+                        //Debug.Log("Unit: Resource taken");
                         state = State.GoToWorkplace;
                     }
                     else
                     {
-                        Debug.Log("Unit: Resource not available");
+                        //Debug.Log("Unit: Resource not available");
                         state = State.Idle;
                     }
                 }
@@ -70,12 +70,12 @@ public class Unit : MonoBehaviour
                     resourceAmount -= wpNode.LeaveResource();
                     if (resourceAmount == 0)
                     {
-                        Debug.Log("Unit: Resource left");
+                        //Debug.Log("Unit: Resource left");
                         state = State.Idle;
                     }
                     else
                     {
-                        Debug.Log("Unit: Workplace full");
+                        //Debug.Log("Unit: Workplace full");
                         state = State.Idle;
                     }
                 }

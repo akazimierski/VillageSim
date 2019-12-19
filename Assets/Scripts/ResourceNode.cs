@@ -6,27 +6,35 @@ using UnityEngine;
 public class ResourceNode : MonoBehaviour
 {
 
-    private int amount;
+    private uint amount;
+    private bool isRenewable;
+    private uint resourceAmountMax;
 
     // Start is called before the first frame update
     void Start()
     {
         amount = 10;
-    }
+        resourceAmountMax = 10;
+        isRenewable = true;
+        if (isRenewable)
+        {
+            InvokeRepeating("RenewResource", 15.0f, 15.0f);
+        }
+     }
 
-    public int GetResourceAmount()
+    public uint GetResourceAmount()
     {
         return amount;
     }
 
-    public int TakeResource()
+    public uint TakeResource()
     {
-        int value = 0;
+        uint value = 0;
         if (GetResourceAmount() > 0)
         {
             amount -= 1;
             value = 1;
-            Debug.Log("ResourceNode: " + GetResourceAmount().ToString());
+            //Debug.Log("ResourceNode: " + GetResourceAmount().ToString());
         }
         return value;
     }
@@ -39,5 +47,14 @@ public class ResourceNode : MonoBehaviour
             value = true;
         }
         return value;
+    }
+
+    private void RenewResource()
+    {
+        if ( amount < resourceAmountMax)
+        {
+            amount += 1;
+            //Debug.Log("ResourceNode: Renew");
+        }
     }
 }

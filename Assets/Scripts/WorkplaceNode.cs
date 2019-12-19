@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class WorkplaceNode : MonoBehaviour
 {
-    private int resourceAmount;
-    private int resourceAmountMax;
+    private uint resourceAmount;
+    private uint resourceAmountMax;
 
     // Start is called before the first frame update
     void Start()
@@ -16,24 +16,24 @@ public class WorkplaceNode : MonoBehaviour
         InvokeRepeating("Production", 15.0f, 15.0f);
     }
 
-    public int LeaveResource()
+    public uint LeaveResource()
     {
-        int value = 0;
+        uint value = 0;
         if (GetResourceAmount() < GetResourceAmountMax())
         {
             resourceAmount += 1;
             value = 1;
-            Debug.Log("WorkplaceNode: " + GetResourceAmount().ToString());
+            //Debug.Log("WorkplaceNode: " + GetResourceAmount().ToString());
         }
         return value;
     }
 
-    public int GetResourceAmount()
+    public uint GetResourceAmount()
     {
         return resourceAmount;
     }
 
-    public int GetResourceAmountMax()
+    public uint GetResourceAmountMax()
     {
         return resourceAmountMax;
     }
@@ -53,7 +53,7 @@ public class WorkplaceNode : MonoBehaviour
         if (GetResourceAmount() > 0)
         {
             resourceAmount -= 1;
-            Debug.Log("Workplace: Production");
+            //Debug.Log("Workplace: Production");
         }
     }
 }
