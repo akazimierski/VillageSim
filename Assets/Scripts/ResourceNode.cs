@@ -5,56 +5,51 @@ using UnityEngine;
 
 public class ResourceNode : MonoBehaviour
 {
-
-    private uint amount;
-    private bool isRenewable;
-    private uint resourceAmountMax;
+    private uint resourceCount;
+    private uint resourceCountMax;
+    //private bool isRenewable;
 
     // Start is called before the first frame update
     void Start()
     {
-        amount = 10;
-        resourceAmountMax = 10;
-        isRenewable = true;
-        if (isRenewable)
-        {
-            InvokeRepeating("RenewResource", 15.0f, 15.0f);
-        }
+        resourceCount = 10;
+        resourceCountMax = 10;
+        //isRenewable = true;
      }
 
-    public uint GetResourceAmount()
+    public uint GetResourceCount()
     {
-        return amount;
+        return resourceCount;
     }
 
     public uint TakeResource()
     {
         uint value = 0;
-        if (GetResourceAmount() > 0)
+        if (IsResourceAvailable())
         {
-            amount -= 1;
+            resourceCount -= 1;
             value = 1;
-            //Debug.Log("ResourceNode: " + GetResourceAmount().ToString());
+            Debug.Log("ResourceNode: " + GetResourceCount().ToString());
         }
         return value;
     }
 
-    internal bool isResourceAvailable()
+    internal bool IsResourceAvailable()
     {
         bool value = false;
-        if (GetResourceAmount() > 0)
+        if (GetResourceCount() > 0)
         {
             value = true;
         }
         return value;
     }
 
-    private void RenewResource()
+    public void RenewResource()
     {
-        if ( amount < resourceAmountMax)
+        if ( resourceCount < resourceCountMax)
         {
-            amount += 1;
-            //Debug.Log("ResourceNode: Renew");
+            resourceCount += 1;
+            Debug.Log("ResourceNode: Renew");
         }
     }
 }

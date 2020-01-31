@@ -896,6 +896,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Workplace
       objectReference: {fileID: 0}
+    - target: {fileID: 4704382098454663663, guid: 2450ef1499d2a3246b8fd386ad61bed5,
+        type: 3}
+      propertyPath: m_TagString
+      value: Workplace
+      objectReference: {fileID: 0}
     - target: {fileID: 4704382098454663659, guid: 2450ef1499d2a3246b8fd386ad61bed5,
         type: 3}
       propertyPath: m_LocalPosition.x

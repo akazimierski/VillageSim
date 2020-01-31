@@ -6,11 +6,12 @@ public class Unit : MonoBehaviour
 {
     public GameObject resource;
     public GameObject workplace;
+    public bool employed;
 
     private ResourceNode rsrcNode;
     private WorkplaceNode wpNode;
     private State state;
-    private uint resourceAmount;
+    private uint carryResource;
 
     enum State
     {
@@ -19,12 +20,12 @@ public class Unit : MonoBehaviour
         GoToWorkplace
     }
 
-
     // Start is called before the first frame update
     void Start()
     {
+        employed = false;
         state = State.Idle;
-        resourceAmount = 0;
+        carryResource = 0;
         rsrcNode = resource.GetComponent<ResourceNode>();
         wpNode = workplace.GetComponent<WorkplaceNode>();
     }
@@ -35,7 +36,7 @@ public class Unit : MonoBehaviour
         switch (state)
         {
             case State.Idle:
-                if (wpNode.IsStorageFree() && rsrcNode.isResourceAvailable())
+                if (wpNode.IsStorageFree() && rsrcNode.IsResourceAvailable())
                 {
                     state = State.GoToResource;
                 }
@@ -47,8 +48,8 @@ public class Unit : MonoBehaviour
                 }
                 else
                 {
-                    resourceAmount += rsrcNode.TakeResource();
-                    if (resourceAmount > 0)
+                    carryResource += rsrcNode.TakeResource();
+                    if (carryResource > 0)
                     {
                         //Debug.Log("Unit: Resource taken");
                         state = State.GoToWorkplace;
@@ -67,8 +68,8 @@ public class Unit : MonoBehaviour
                 }
                 else
                 {
-                    resourceAmount -= wpNode.LeaveResource();
-                    if (resourceAmount == 0)
+                    carryResource -= wpNode.LeaveResource();
+                    if (carryResource == 0)
                     {
                         //Debug.Log("Unit: Resource left");
                         state = State.Idle;
@@ -82,5 +83,27 @@ public class Unit : MonoBehaviour
                 break;
         }
         //Debug.Log(state);
+    }
+
+    public void AssignWorkplace(GameObject workplace)
+    {
+        if (this.workplace == null)
+        {
+            this.workplace = workplace;
+            this.employed = true;
+        }
+    }
+
+    public void AssignResource(GameObject resource)
+    {
+        if (this.resource == null)
+        {
+            this.resource = resource;
+        }
+    }
+
+    public bool IsUnemployed()
+    {
+        return !employed;
     }
 }

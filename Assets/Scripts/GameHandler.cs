@@ -14,14 +14,25 @@ public class GameHandler : MonoBehaviour
     Plane plane;
     Vector3 hitPoint;
     State gameState;
+
+    UnitsHandler unitsHandler;
+    ResourcesHandler resourcesHandler;
+    WorkplaceHandler workplaceHandler;
+
     GameObject currentGameObjectPrefab;
     GameObject createdGameObjectToPlace;
+    float timeSpan = 0;
+    float sendRate = 1.0f;
 
     void Start()
     {
         gameState = State.Idle;
         grid = new NodeGrid(11, 11);
         plane = new Plane(Vector3.up, Vector3.zero);
+        unitsHandler = new UnitsHandler();
+        resourcesHandler = new ResourcesHandler();
+        workplaceHandler = new WorkplaceHandler();
+
     }
 
     void Update()
@@ -29,13 +40,14 @@ public class GameHandler : MonoBehaviour
         switch (gameState)
         {
             case State.Idle:
-                Debug.Log("Idle");
+                //Debug.Log("Idle");
                 break;
             case State.PlaceWorkplace:
-                Debug.Log("Place Workplace");
-                snapObjectToActiveNode(createdGameObjectToPlace);
+                //Debug.Log("Place Workplace");
+                SnapObjectToActiveNode(createdGameObjectToPlace);
                 if (Input.GetMouseButton(0))
                 {
+                    workplaceHandler.AddWorkplaceNode(createdGameObjectToPlace);
                     createdGameObjectToPlace = null;
                     gameState = State.Idle;
                 }
@@ -45,6 +57,15 @@ public class GameHandler : MonoBehaviour
                     gameState = State.Idle;
                 }
                 break;
+        }
+        timeSpan += Time.deltaTime;
+        if (timeSpan > sendRate)
+        {
+            timeSpan -= sendRate;
+            //Action
+            unitsHandler.EmployUnits(workplaceHandler);
+            resourcesHandler.RenewResources();
+            workplaceHandler.RunProduction();
         }
     }
 
@@ -65,11 +86,10 @@ public class GameHandler : MonoBehaviour
         gameState = State.PlaceWorkplace;
     }
 
-    void snapObjectToActiveNode(GameObject objectToSnap)
+    void SnapObjectToActiveNode(GameObject objectToSnap)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        float enter = 0.0f;
-        if (plane.Raycast(ray, out enter))
+        if (plane.Raycast(ray, out float enter))
         {
             hitPoint = ray.GetPoint(enter);
             grid.ActivateClosestNodeToHitPoint(hitPoint);
